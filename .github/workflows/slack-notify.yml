@@ -1,0 +1,21 @@
+name: Notify Slack on Push or Pull
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    types: [opened, reopened, closed]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Slack notification
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          payload: |
+            {
+              "text": ":bell: *New GitHub Activity!*\n*Repository:* ${{ github.repository }}\n*Event:* ${{ github.event_name }}\n*Actor:* ${{ github.actor }}\n*Commit Message:* ${{ github.event.head_commit.message || 'N/A' }}\n*Branch:* ${{ github.ref_name }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
