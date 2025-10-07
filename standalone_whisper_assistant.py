@@ -26,6 +26,23 @@ def cleanup():
 def signal_handler(sig, frame):
     cleanup()
     sys.exit(0)
+def INI_API_KEY'))
+        self.model = genai.GenerativeModel('gemini-2.0-flash-exp')
+        
+        # Load Whisper with auto-download
+        try:
+            print("Loading Whisper model...")
+            self.whisper_model = whisper.load_model("base", device="cuda")
+            print("Whisper model loaded with CUDA")
+        except Exception as e:
+            print(f"CUDA not available, using CPU: {e}")
+            self.whisper_model = whisper.load_model("base", device="cpu")
+        
+        # Initialize TTS
+        self.tts_engine = pyttsx3.init()
+        self.tts_engine.setProperty('rate', 180)
+        
+        self.tts_queue = queue.Queue()
         self.audio_queue = queue.Queue()
         self.conversation_history = []
         self.recording = False
@@ -81,28 +98,4 @@ def signal_handler(sig, frame):
         
         silence_count = 0
         
-        with sd.InputStream(channels=1, dtype="float32", samplerate=16000, blocksize=1600) as s:
-            while not stop_flag.is_set():
-                samples, _ = s.read(1600)
-                audio_chunk = samples.reshape(-1)
-                
-                if not tts_playing.is_set():
-                    if self.detect_speech(audio_chunk):
-                        if not self.recording:
-                            self.recording = True
-                            self.audio_buffer = []
-                            print("\nRecording...", end="", flush=True)
-                        
-                        self.audio_buffer.extend(audio_chunk)
-                        silence_count = 0
-                    else:
-                        if self.recording:
-                            silence_count += 1
-                            if silence_count > 30:
-                                self.recording = False
-                                if len(self.audio_buffer) > 16000:
-                                    audio_array = np.array(self.audio_buffer, dtype=np.float32)
-                                    self.audio_queue.put(audio_array)
-                                print("\nProcessing...", end="", flush=True)
-                                silence_count = 0
-
+        
