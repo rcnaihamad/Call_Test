@@ -26,26 +26,6 @@ def cleanup():
 def signal_handler(sig, frame):
     cleanup()
     sys.exit(0)
-
-class WhisperVoiceAssistant:
-    def __init__(self):
-        genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
-        self.model = genai.GenerativeModel('gemini-2.0-flash-exp')
-        
-        # Load Whisper with auto-download
-        try:
-            print("Loading Whisper model...")
-            self.whisper_model = whisper.load_model("base", device="cuda")
-            print("Whisper model loaded with CUDA")
-        except Exception as e:
-            print(f"CUDA not available, using CPU: {e}")
-            self.whisper_model = whisper.load_model("base", device="cpu")
-        
-        # Initialize TTS
-        self.tts_engine = pyttsx3.init()
-        self.tts_engine.setProperty('rate', 180)
-        
-        self.tts_queue = queue.Queue()
         self.audio_queue = queue.Queue()
         self.conversation_history = []
         self.recording = False
