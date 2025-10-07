@@ -1,5 +1,3 @@
 openai-whisper
 google-generativeai
 python-dotenv
-sounddevice
-numpy
