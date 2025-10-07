@@ -67,27 +67,7 @@ def signal_handler(sig, frame):
                     self.tts_engine.say(text)
                     self.tts_engine.runAndWait()
                     tts_playing.clear()
-                self.tts_queue.task_done()
-            except queue.Empty:
-                continue
-    
-    def whisper_worker(self):
-        while not stop_flag.is_set():
-            try:
-                audio_data = self.audio_queue.get(timeout=0.5)
-                if audio_data is not None and not stop_flag.is_set():
-                    result = self.whisper_model.transcribe(audio_data, fp16=True)
-                    text = result["text"].strip()
-                    if text:
-                        print(f"\nYou: {text}")
-                        response = self.get_gemini_response(text)
-                        print(f"Assistant: {response}")
-                        self.tts_queue.put(response)
-                self.audio_queue.task_done()
-            except queue.Empty:
-                continue
-    
-    def detect_speech(self, audio_chunk):
+                self.tts
         energy = np.sum(audio_chunk ** 2) / len(audio_chunk)
         return energy > 0.001
     
