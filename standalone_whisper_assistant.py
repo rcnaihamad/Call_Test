@@ -19,17 +19,7 @@ load_dotenv()
 stop_flag = threading.Event()
 tts_playing = threading.Event()
 
-def cleanup():
-    stop_flag.set()
-    sd.stop()
-
-def signal_handler(sig, frame):
-    cleanup()
-    sys.exit(0)
-
-class WhisperVoiceAssistant:
-    def __init__(self):
-        genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
+def INI_API_KEY'))
         self.model = genai.GenerativeModel('gemini-2.0-flash-exp')
         
         # Load Whisper with auto-download
