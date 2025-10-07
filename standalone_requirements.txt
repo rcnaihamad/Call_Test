@@ -3,6 +3,3 @@ google-generativeai
 python-dotenv
 sounddevice
 numpy
-torch
-torchaudio
-pyttsx3
