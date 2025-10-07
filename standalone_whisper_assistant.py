@@ -146,6 +146,3 @@ class WhisperVoiceAssistant:
                                 print("\nProcessing...", end="", flush=True)
                                 silence_count = 0
 
-if __name__ == "__main__":
-    assistant = WhisperVoiceAssistant()
-    assistant.run()
