@@ -5,19 +5,6 @@ os.environ['GRPC_VERBOSITY'] = 'ERROR'
 os.environ['GLOG_minloglevel'] = '2'
 import whisper
 import sounddevice as sd
-import threading
-import queue
-import signal
-import sys
-import numpy as np
-import google.generativeai as genai
-from dotenv import load_dotenv
-import pyttsx3
-
-load_dotenv()
-
-stop_flag = threading.Event()
-tts_playing = threading.Event()
 
 def cleanup():
     stop_flag.set()
