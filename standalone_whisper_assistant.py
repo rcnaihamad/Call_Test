@@ -121,28 +121,4 @@ class WhisperVoiceAssistant:
         
         silence_count = 0
         
-        with sd.InputStream(channels=1, dtype="float32", samplerate=16000, blocksize=1600) as s:
-            while not stop_flag.is_set():
-                samples, _ = s.read(1600)
-                audio_chunk = samples.reshape(-1)
-                
-                if not tts_playing.is_set():
-                    if self.detect_speech(audio_chunk):
-                        if not self.recording:
-                            self.recording = True
-                            self.audio_buffer = []
-                            print("\nRecording...", end="", flush=True)
-                        
-                        self.audio_buffer.extend(audio_chunk)
-                        silence_count = 0
-                    else:
-                        if self.recording:
-                            silence_count += 1
-                            if silence_count > 30:
-                                self.recording = False
-                                if len(self.audio_buffer) > 16000:
-                                    audio_array = np.array(self.audio_buffer, dtype=np.float32)
-                                    self.audio_queue.put(audio_array)
-                                print("\nProcessing...", end="", flush=True)
-                                silence_count = 0
-
+        
