@@ -5,20 +5,14 @@ os.environ['GRPC_VERBOSITY'] = 'ERROR'
 os.environ['GLOG_minloglevel'] = '2'
 import whisper
 import sounddevice as sd
-import threading
-import queue
-import signal
-import sys
-import numpy as np
-import google.generativeai as genai
-from dotenv import load_dotenv
-import pyttsx3
 
-load_dotenv()
+def cleanup():
+    stop_flag.set()
+    sd.stop()
 
-stop_flag = threading.Event()
-tts_playing = threading.Event()
-
+def signal_handler(sig, frame):
+    cleanup()
+    sys.exit(0)
 def INI_API_KEY'))
         self.model = genai.GenerativeModel('gemini-2.0-flash-exp')
         
@@ -77,27 +71,7 @@ def INI_API_KEY'))
                     self.tts_engine.say(text)
                     self.tts_engine.runAndWait()
                     tts_playing.clear()
-                self.tts_queue.task_done()
-            except queue.Empty:
-                continue
-    
-    def whisper_worker(self):
-        while not stop_flag.is_set():
-            try:
-                audio_data = self.audio_queue.get(timeout=0.5)
-                if audio_data is not None and not stop_flag.is_set():
-                    result = self.whisper_model.transcribe(audio_data, fp16=True)
-                    text = result["text"].strip()
-                    if text:
-                        print(f"\nYou: {text}")
-                        response = self.get_gemini_response(text)
-                        print(f"Assistant: {response}")
-                        self.tts_queue.put(response)
-                self.audio_queue.task_done()
-            except queue.Empty:
-                continue
-    
-    def detect_speech(self, audio_chunk):
+                self.tts
         energy = np.sum(audio_chunk ** 2) / len(audio_chunk)
         return energy > 0.001
     
